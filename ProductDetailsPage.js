@@ -1,7 +1,8 @@
 var cart = localStorage.getItem("cart");
 var id = localStorage.getItem("id");
+var name = localStorage.getItem("name");
 
-var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?id:'+id ;
+var newurl = window.location.protocol + "//" + window.location.host+  window.location.pathname + '?id:'+id +'/' +name;
 window.history.pushState({ path: newurl }, '', newurl);
 
 var mArr = JSON.parse(localStorage.getItem("product"));
@@ -62,20 +63,36 @@ function createProductDetails(obj) {
     var previewWrapper = document.createElement('div');
     previewWrapper.className = "preview-wrapper";
 
-    var previewDiv = document.createElement('div');
+    let previewDiv = document.createElement('div');
         previewDiv.className = "preview-card";
 
     var photoArr = obj.photos;
 
-    for(var j=0;j<photoArr.length;j++) {
-        var previewImageWrapper = document.createElement('div');
+    for(let j=0;j<photoArr.length;j++) {
+        let previewImageWrapper = document.createElement('div');
         previewImageWrapper.className = "previewImage-wrapper";
-        var previewImage = document.createElement('img');
+        let previewImage = document.createElement('img');
         previewImage.id = "preview-image";
         previewImage.src = obj.photos[j];
+
+        if(j===0)
+        previewImage.style.border = "2px solid teal";
+
         previewImageWrapper.appendChild(previewImage);
 
         previewDiv.appendChild(previewImageWrapper);
+
+        previewImage.onclick = function(e) {
+            let x, i;
+            x = document.querySelectorAll("#preview-image");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.border = "none";
+            }
+            image.src = e.target.src;
+            console.log(e.target);
+            e.target.style.border = "2px solid teal";
+        }
+
     }
 
     var button = document.createElement('button');
@@ -123,17 +140,6 @@ function createProductDetails(obj) {
         cartItems.innerHTML = cart;
         localStorage.setItem("cart", cart);
     }
-    previewDiv.onclick = function(e) {
-        previewDiv.style.border = "none";
-        image.src = e.target.src;
-        e.target.style.border = "2px solid teal";
-    }
-
-    // previewImage.onclick = function(e) {
-    //     image.src = e.target.src;
-    //     console.log(e.target);
-    //     e.target.style.border = "2px solid teal";
-    // }
 
     return wrapper;
 }
